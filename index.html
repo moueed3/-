@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="تداول ذكي">
+<meta name="theme-color" content="#060a14">
+<title>تداول ذكي — أسهم السعودية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#060a14;--bg2:#0b1020;--bg3:#101828;
+  --card:#0d1522;--card2:#121e30;
+  --border:#182035;--border2:#1e2d45;
+  --gold:#f5c230;--green:#00dd8a;--red:#ff3355;
+  --blue:#4080ff;--purple:#9060ff;
+  --text:#dce4f5;--text2:#5a7090;--text3:#2a3a55;
+  --r:14px;--rs:9px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 10%,rgba(64,128,255,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 80% 80%,rgba(144,96,255,.04) 0%,transparent 60%);}
+.app{display:flex;flex-direction:column;height:100%;position:relative;z-index:1;}
+.pages{flex:1;overflow:hidden;position:relative;}
+.page{position:absolute;inset:0;overflow-y:auto;display:none;padding-bottom:80px;}
+.page.active{display:block;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+nav{display:flex;background:rgba(6,10,20,.97);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom,0px);flex-shrink:0;position:relative;z-index:10;}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px 8px;gap:3px;border:none;background:transparent;color:var(--text2);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:10px;font-weight:600;transition:color .2s;}
+.nb .ni{font-size:22px;line-height:1;transition:transform .2s;}
+.nb.on{color:var(--gold);}
+.nb.on .ni{transform:scale(1.1);}
+.tb{padding:18px 18px 14px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(6,10,20,.95);backdrop-filter:blur(16px);z-index:5;}
+.tb-t{font-size:19px;font-weight:900;letter-spacing:-.3px;}
+.tb-s{font-size:11px;color:var(--text2);margin-top:2px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;}
+input,select{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:var(--rs);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s;width:100%;}
+input:focus,select:focus{border-color:var(--blue);}
+input::placeholder{color:var(--text3);}
+.row{display:flex;gap:8px;margin-bottom:10px;}
+.col{flex:1;display:flex;flex-direction:column;gap:5px;}
+.lbl{font-size:11px;color:var(--text2);font-weight:700;}
+.btn{padding:11px 16px;border-radius:var(--rs);border:none;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-blue:active{filter:brightness(.85);}
+.btn-gold{background:var(--gold);color:#060a14;}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text2);}
+.btn-red{background:rgba(255,51,85,.12);color:var(--red);border:1px solid rgba(255,51,85,.25);}
+.btn-sm{padding:7px 11px;font-size:12px;}
+.btn-full{width:100%;}
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.bg{background:rgba(0,221,138,.12);color:var(--green);}
+.br{background:rgba(255,51,85,.12);color:var(--red);}
+.by{background:rgba(245,194,48,.12);color:var(--gold);}
+.bb{background:rgba(64,128,255,.12);color:var(--blue);}
+.ptabs{display:flex;gap:6px;margin-bottom:14px;}
+.pt{flex:1;padding:8px 4px;border-radius:var(--rs);border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Tajawal',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;}
+.pt.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.pre{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:6px 13px;border-radius:20px;font-family:'Tajawal',sans-serif;font-size:11px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.pre:active{border-color:var(--gold);color:var(--gold);}
+.srow{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden;animation:fadeUp .25s ease;}
+.srow-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}
+.srow-head:active{background:var(--card2);}
+.sinfo{display:flex;flex-direction:column;gap:3px;}
+.ssym{font-size:17px;font-weight:800;}
+.sname{font-size:11px;color:var(--text2);}
+.sprice{font-size:20px;font-weight:900;}
+.sright{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.spill{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:800;}
+.sp-buy{background:rgba(0,221,138,.15);color:var(--green);}
+.sp-sell{background:rgba(255,51,85,.15);color:var(--red);}
+.sp-hold{background:rgba(245,194,48,.15);color:var(--gold);}
+.sp-wait{background:rgba(64,128,255,.15);color:var(--blue);}
+.sdet{display:none;padding:14px 16px;border-top:1px solid var(--border);background:var(--bg3);}
+.sdet.open{display:block;animation:fadeUp .2s ease;}
+.det-chart{height:100px;margin-bottom:12px;}
+.irow{display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap;}
+.ibox{flex:1;min-width:55px;background:var(--card);border-radius:var(--rs);padding:8px 10px;text-align:center;}
+.ilbl{font-size:9px;color:var(--text2);margin-bottom:3px;}
+.ival{font-size:13px;font-weight:800;}
+.rlist{list-style:none;}
+.rlist li{font-size:12px;color:var(--text2);padding:3px 0;display:flex;align-items:center;gap:6px;}
+.rlist li::before{content:'›';color:var(--text3);}
+.ai-bubble{background:linear-gradient(135deg,rgba(64,128,255,.08),rgba(144,96,255,.08));border:1px solid rgba(64,128,255,.2);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;}
+.ai-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.ai-icon{font-size:18px;}
+.ai-title{font-size:13px;font-weight:700;color:var(--blue);}
+.ai-text{font-size:13px;color:var(--text2);line-height:1.85;}
+.ai-text strong{color:var(--text);font-weight:700;}
+.tbl-wrap{overflow-x:auto;border-radius:var(--rs);border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:var(--bg3);color:var(--text2);font-size:10px;font-weight:700;letter-spacing:.4px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--border);}
+td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg3);}
+.vbox{border-radius:var(--rs);padding:13px 15px;margin-top:10px;}
+.vbuy{background:rgba(0,221,138,.07);border:1px solid rgba(0,221,138,.2);}
+.vsell{background:rgba(255,51,85,.07);border:1px solid rgba(255,51,85,.2);}
+.vhold{background:rgba(245,194,48,.07);border:1px solid rgba(245,194,48,.2);}
+.vwait{background:rgba(64,128,255,.07);border:1px solid rgba(64,128,255,.2);}
+.vtitle{font-size:14px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.vbuy .vtitle{color:var(--green);}
+.vsell .vtitle{color:var(--red);}
+.vhold .vtitle{color:var(--gold);}
+.vwait .vtitle{color:var(--blue);}
+.vtext{font-size:12px;color:var(--text2);line-height:1.75;}
+.sec{padding:14px 18px;}
+.stitle{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.8px;text-transform:uppercase;margin-bottom:11px;}
+.spin{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading{display:flex;align-items:center;gap:10px;padding:20px;color:var(--text2);font-size:13px;}
+.empty{text-align:center;padding:36px 20px;color:var(--text2);}
+.empty .ei{font-size:36px;margin-bottom:10px;}
+.empty p{font-size:13px;}
+.disc{background:rgba(245,194,48,.05);border:1px solid rgba(245,194,48,.15);border-radius:var(--rs);padding:10px 14px;font-size:11px;color:var(--text2);line-height:1.7;margin:0 18px 14px;}
+.disc strong{color:var(--gold);}
+.stat2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.sbox{background:var(--bg3);border-radius:var(--rs);padding:10px;text-align:center;}
+.slbl{font-size:10px;color:var(--text2);margin-bottom:3px;}
+.sval{font-size:15px;font-weight:800;}
+.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--card2);border:1px solid var(--border2);color:var(--text);padding:9px 20px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:all .25s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.sbar{display:flex;gap:8px;margin-bottom:14px;}
+.sbar input{flex:1;}
+@keyframes blink{0%,80%,100%{opacity:0;}40%{opacity:1;}}
+.dots span{animation:blink 1.4s infinite;font-size:20px;}
+.dots span:nth-child(2){animation-delay:.2s;}
+.dots span:nth-child(3){animation-delay:.4s;}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="pages">
+
+<!-- PAGE 1 — WATCHLIST -->
+<div class="page active" id="p-watch">
+  <div class="tb">
+    <div><div class="tb-t">📈 قائمة الأسهم</div><div class="tb-s">تحليل بالذكاء الاصطناعي</div></div>
+    <button class="btn btn-ghost btn-sm" onclick="refreshAll()">🔄</button>
+  </div>
+  <div class="sec">
+    <div class="ptabs">
+      <button class="pt on" onclick="setPeriod('daily',this)">يومي</button>
+      <button class="pt" onclick="setPeriod('weekly',this)">أسبوعي</button>
+      <button class="pt" onclick="setPeriod('monthly',this)">شهري</button>
+    </div>
+    <div class="sbar">
+      <input id="wIn" placeholder="رمز السهم (مثل 2222)" maxlength="6" onkeydown="if(event.key==='Enter')addWatch()">
+      <button class="btn btn-blue" onclick="addWatch()">➕</button>
+    </div>
+    <div class="presets">
+      <div class="pre" onclick="quickAdd('2222','أرامكو')">أرامكو</div>
+      <div class="pre" onclick="quickAdd('1120','الراجحي')">الراجحي</div>
+      <div class="pre" onclick="quickAdd('7010','stc')">stc</div>
+      <div class="pre" onclick="quickAdd('1180','الأهلي')">الأهلي</div>
+      <div class="pre" onclick="quickAdd('7030','زين')">زين</div>
+      <div class="pre" onclick="quickAdd('1010','الرياض')">بنك الرياض</div>
+    </div>
+    <div id="watchList"><div class="empty"><div class="ei">📊</div><p>أضف سهماً للبدء</p></div></div>
+  </div>
+  <div class="disc"><strong>⚠️</strong> التحليل تعليمي فقط وليس توصية استثمارية.</div>
+</div>
+
+<!-- PAGE 2 — LOG -->
+<div class="page" id="p-log">
+  <div class="tb">
+    <div><div class="tb-t">📝 تسجيل الأسعار</div><div class="tb-s">سجّل يدوياً وحلّل</div></div>
+    <button class="btn btn-red btn-sm" onclick="clearLog()">🗑</button>
+  </div>
+  <div class="sec">
+    <div class="card">
+      <div class="row">
+        <div class="col"><span class="lbl">رمز السهم</span><input id="lSym" placeholder="2222" maxlength="6"></div>
+        <div class="col"><span class="lbl">السعر (ريال)</span><input id="lPrice" type="number" placeholder="27.50" step="0.01"></div>
+      </div>
+      <div class="row">
+        <div class="col"><span class="lbl">التاريخ</span><input id="lDate" type="date"></div>
+        <div class="col"><span class="lbl">النوع</span>
+          <select id="lType"><option value="close">إغلاق</option><option value="buy">شراء</option><option value="sell">بيع</option></select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col"><span class="lbl">ملاحظة</span><input id="lNote" placeholder="اختياري"></div>
+        <div class="col" style="justify-content:flex-end;flex-direction:row;align-items:flex-end;">
+          <button class="btn btn-gold btn-full" onclick="addLog()">💾 حفظ</button>
+        </div>
+      </div>
+    </div>
+    <div id="logAnalysis"></div>
+    <div id="logTblWrap" style="display:none">
+      <div class="stitle">السجل الكامل</div>
+      <div class="tbl-wrap">
+        <table><thead><tr><th>التاريخ</th><th>الرمز</th><th>السعر</th><th>النوع</th><th>ملاحظة</th><th></th></tr></thead>
+        <tbody id="logTbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3 — AI -->
+<div class="page" id="p-ai">
+  <div class="tb">
+    <div><div class="tb-t">🤖 التحليل الذكي</div><div class="tb-s">تحليل شامل بالذكاء الاصطناعي</div></div>
+  </div>
+  <div class="sec">
+    <div class="sbar">
+      <input id="aiIn" placeholder="رمز أو اسم السهم (مثل 2222 أو أرامكو)" onkeydown="if(event.key==='Enter')doAI()">
+      <button class="btn btn-blue" onclick="doAI()">تحليل</button>
+    </div>
+    <div class="presets">
+      <div class="pre" onclick="setAI('2222 أرامكو')">أرامكو</div>
+      <div class="pre" onclick="setAI('1120 الراجحي')">الراجحي</div>
+      <div class="pre" onclick="setAI('7010 stc')">stc</div>
+      <div class="pre" onclick="setAI('1180 الأهلي')">الأهلي</div>
+      <div class="pre" onclick="setAI('7030 زين')">زين</div>
+    </div>
+    <div id="aiResult"><div class="empty"><div class="ei">🤖</div><p>ابحث عن سهم للحصول على تحليل ذكي شامل</p></div></div>
+  </div>
+  <div class="disc"><strong>⚠️</strong> التحليل تعليمي فقط. ليس توصية استثمارية.</div>
+</div>
+
+</div>
+<nav>
+  <button class="nb on" id="nb-watch" onclick="go('watch')"><span class="ni">📈</span>الأسهم</button>
+  <button class="nb" id="nb-log" onclick="go('log')"><span class="ni">📝</span>تسجيل</button>
+  <button class="nb" id="nb-ai" onclick="go('ai')"><span class="ni">🤖</span>تحليل ذكي</button>
+</nav>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+let WL  = JSON.parse(localStorage.getItem('wl')||'[]');
+let LE  = JSON.parse(localStorage.getItem('le')||'[]');
+let period = 'daily';
+let MC={}, LC={};
+
+// ── NAV ──
+function go(p){
+  ['watch','log','ai'].forEach(x=>{
+    document.getElementById('p-'+x).classList.toggle('active',x===p);
+    document.getElementById('nb-'+x).classList.toggle('on',x===p);
+  });
+  if(p==='log') renderLog();
+}
+
+// ── CLAUDE API ──
+async function claude(system, user){
+  const r = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      system,
+      tools:[{type:'web_search_20250305',name:'web_search'}],
+      messages:[{role:'user',content:user}]
+    })
+  });
+  const d = await r.json();
+  if(d.error) throw new Error(d.error.message);
+  return (d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+}
+
+// ── PAGE 1 ──
+function setPeriod(p,btn){
+  period=p;
+  document.querySelectorAll('.pt').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  refreshAll();
+}
+function addWatch(){
+  const s=document.getElementById('wIn').value.trim().toUpperCase();
+  if(!s){showToast('أدخل رمز السهم');return;}
+  if(WL.find(x=>x.sym===s)){showToast('موجود ✓');return;}
+  document.getElementById('wIn').value='';
+  WL.push({sym:s,name:s});saveWL();
+  renderRow(s,s,null);
+  fetchStock(s);
+}
+function quickAdd(s,n){
+  if(WL.find(x=>x.sym===s)){showToast('موجود ✓');return;}
+  WL.push({sym:s,name:n});saveWL();
+  renderRow(s,n,null);
+  fetchStock(s);
+}
+function removeWatch(s){
+  WL=WL.filter(x=>x.sym!==s);saveWL();
+  document.getElementById('sr-'+s)?.remove();
+  if(MC[s]){MC[s].destroy();delete MC[s];}
+  if(!WL.length) document.getElementById('watchList').innerHTML='<div class="empty"><div class="ei">📊</div><p>أضف سهماً للبدء</p></div>';
+  showToast('تم الحذف');
+}
+async function refreshAll(){for(const s of WL) await fetchStock(s.sym);}
+
+async function fetchStock(sym){
+  const periodTxt={'daily':'اليوم مع آخر 20 يوم تداول','weekly':'الأسبوع الحالي مع آخر 20 أسبوع','monthly':'الشهر الحالي مع آخر 20 شهر'}[period];
+  const sys=`أنت محلل مالي. ابحث عن سهم ${sym} في السوق السعودي واستخرج البيانات.
+أعد JSON فقط بدون أي نص خارجه:
+{"price":0.0,"change":0.0,"changePct":0.0,"name":"اسم","signal":"buy|sell|hold|wait","reasons":["سبب1","سبب2","سبب3"],"rsi":50,"trend":"up|down|neutral","closes":[n1,n2,...n20]}
+closes: آخر 20 سعر إغلاق من الأقدم للأحدث. signal حسب التحليل الفني.`;
+
+  renderRow(sym, WL.find(s=>s.sym===sym)?.name||sym, null);
+  try{
+    const raw = await claude(sys, `ابحث عن سعر وبيانات سهم ${sym} في تداول (${periodTxt})`);
+    const m = raw.match(/\{[\s\S]*?\}/);
+    if(!m) throw new Error('no json');
+    const d = JSON.parse(m[0]);
+    const st = WL.find(s=>s.sym===sym);
+    if(st && d.name) st.name=d.name;
+    const closes=(d.closes||[]).map(Number).filter(v=>!isNaN(v)&&v>0);
+    if(!closes.length) closes.push(d.price);
+    const local = analyzeLocal(closes);
+    renderRow(sym, d.name||sym,{
+      price:d.price||0, changePct:d.changePct||0, changeAbs:d.change||0,
+      signal:d.signal||local.signal, reasons:d.reasons||local.reasons,
+      ma10:local.ma10, ma20:local.ma20, ma50:local.ma50,
+      rsi:d.rsi||local.rsi, trend:d.trend||local.trend, closes
+    });
+    saveWL();
+  }catch(e){
+    console.error(sym,e);
+    const row=document.getElementById('sr-'+sym);
+    if(row) row.innerHTML=`
+      <div class="srow-head">
+        <div class="sinfo"><span class="ssym">${sym}</span><span class="sname" style="color:var(--red)">فشل الجلب</span></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost btn-sm" onclick="fetchStock('${sym}')">إعادة</button>
+          <button class="btn btn-red btn-sm" onclick="removeWatch('${sym}')">حذف</button>
+        </div>
+      </div>`;
+  }
+}
+
+function renderRow(sym,name,data){
+  const list=document.getElementById('watchList');
+  list.querySelector('.empty')?.remove();
+  document.getElementById('sr-'+sym)?.remove();
+
+  const wrap=document.createElement('div');
+  wrap.id='sr-'+sym; wrap.className='srow';
+
+  if(!data){
+    wrap.innerHTML=`<div class="srow-head"><div class="sinfo"><span class="ssym">${sym}</span><span class="sname">${name}</span></div><div class="loading"><div class="spin"></div><span>جارٍ الجلب بالذكاء الاصطناعي...</span></div></div>`;
+    list.appendChild(wrap); return;
+  }
+
+  const{price,changePct,changeAbs,signal,reasons,ma10,ma20,ma50,rsi,closes,trend}=data;
+  const up=(changePct||0)>=0;
+  const pCls={buy:'sp-buy',sell:'sp-sell',hold:'sp-hold',wait:'sp-wait'}[signal]||'sp-wait';
+  const pLbl={buy:'شراء 🟢',sell:'بيع 🔴',hold:'احتفاظ 🟡',wait:'انتظار ⏳'}[signal]||'انتظار';
+  const vCls={buy:'vbuy',sell:'vsell',hold:'vhold',wait:'vwait'}[signal]||'vwait';
+  const vLbl={buy:'🟢 إشارة شراء',sell:'🔴 إشارة بيع',hold:'🟡 احتفاظ',wait:'⏳ انتظار'}[signal];
+
+  wrap.innerHTML=`
+  <div class="srow-head" onclick="toggleDet('${sym}')">
+    <div class="sinfo">
+      <span class="ssym">${sym}</span>
+      <span class="sname">${name}</span>
+      <span class="spill ${pCls}" style="margin-top:5px;display:inline-block;">${pLbl}</span>
+    </div>
+    <div class="sright">
+      <span class="sprice">${(+price||0).toFixed(2)} ﷼</span>
+      <span class="badge ${up?'bg':'br'}">${up?'▲':'▼'} ${Math.abs(+changeAbs||0).toFixed(2)} (${Math.abs(+changePct||0).toFixed(2)}%)</span>
+      <button class="btn btn-red btn-sm" style="margin-top:6px;" onclick="event.stopPropagation();removeWatch('${sym}')">حذف</button>
+    </div>
+  </div>
+  <div class="sdet" id="sd-${sym}">
+    <div class="det-chart"><canvas id="mc-${sym}"></canvas></div>
+    <div class="irow">
+      <div class="ibox"><div class="ilbl">MA10</div><div class="ival" style="color:${price>ma10?'var(--green)':'var(--red)'}">${(+ma10||0).toFixed(1)}</div></div>
+      <div class="ibox"><div class="ilbl">MA20</div><div class="ival" style="color:${price>ma20?'var(--green)':'var(--red)'}">${(+ma20||0).toFixed(1)}</div></div>
+      <div class="ibox"><div class="ilbl">MA50</div><div class="ival" style="color:${price>ma50?'var(--green)':'var(--red)'}">${(+ma50||0).toFixed(1)}</div></div>
+      <div class="ibox"><div class="ilbl">RSI</div><div class="ival" style="color:${rsi>70?'var(--red)':rsi<30?'var(--green)':'var(--text)'}">${(+rsi||50).toFixed(0)}</div></div>
+    </div>
+    <div class="vbox ${vCls}">
+      <div class="vtitle">${vLbl}</div>
+      <ul class="rlist">${(reasons||[]).map(r=>`<li>${r}</li>`).join('')}</ul>
+    </div>
+    <div style="font-size:10px;color:var(--text3);margin-top:8px;text-align:center;">تحليل بالذكاء الاصطناعي · ${new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})}</div>
+  </div>`;
+
+  list.appendChild(wrap);
+
+  setTimeout(()=>{
+    const canvas=document.getElementById('mc-'+sym);
+    if(!canvas||!closes?.length)return;
+    if(MC[sym]) MC[sym].destroy();
+    const col=trend==='up'?'#00dd8a':trend==='down'?'#ff3355':'#4080ff';
+    MC[sym]=new Chart(canvas,{type:'line',data:{labels:closes.map((_,i)=>i),datasets:[{data:closes,borderColor:col,borderWidth:2,pointRadius:0,fill:true,backgroundColor:col+'15',tension:.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
+  },80);
+}
+
+function toggleDet(s){document.getElementById('sd-'+s)?.classList.toggle('open');}
+
+// ── PAGE 2 ──
+function addLog(){
+  const sym=document.getElementById('lSym').value.trim().toUpperCase();
+  const price=parseFloat(document.getElementById('lPrice').value);
+  const date=document.getElementById('lDate').value;
+  const type=document.getElementById('lType').value;
+  const note=document.getElementById('lNote').value.trim();
+  if(!sym||isNaN(price)||!date){showToast('أدخل الرمز والسعر والتاريخ');return;}
+  LE.unshift({id:Date.now(),sym,price,date,type,note});
+  localStorage.setItem('le',JSON.stringify(LE));
+  document.getElementById('lSym').value='';
+  document.getElementById('lPrice').value='';
+  document.getElementById('lNote').value='';
+  showToast('✅ تم الحفظ');
+  renderLog();
+}
+function delLog(id){LE=LE.filter(e=>e.id!==id);localStorage.setItem('le',JSON.stringify(LE));renderLog();}
+function clearLog(){if(!confirm('مسح كل السجل؟'))return;LE=[];localStorage.removeItem('le');renderLog();}
+
+function renderLog(){
+  const byS={};
+  LE.forEach(e=>{if(!byS[e.sym])byS[e.sym]=[];byS[e.sym].push(e);});
+  const an=document.getElementById('logAnalysis');
+
+  if(!Object.keys(byS).length){
+    an.innerHTML='<div class="empty"><div class="ei">📝</div><p>سجّل أسعار للتحليل</p></div>';
+    document.getElementById('logTblWrap').style.display='none';
+    return;
+  }
+
+  let html='';
+  Object.entries(byS).forEach(([sym,ents])=>{
+    const sorted=[...ents].sort((a,b)=>new Date(a.date)-new Date(b.date));
+    const closes=sorted.map(e=>e.price);
+    const a=analyzeLocal(closes);
+    if(!a)return;
+    const last=closes[closes.length-1],first=closes[0];
+    const chg=((last-first)/first*100),up=chg>=0;
+    const high=Math.max(...closes),low=Math.min(...closes);
+    const vCls={buy:'vbuy',sell:'vsell',hold:'vhold',wait:'vwait'}[a.signal]||'vwait';
+    const sLbl={buy:'🟢 إشارة شراء',sell:'🔴 إشارة بيع',hold:'🟡 احتفاظ',wait:'⏳ انتظار'}[a.signal];
+    html+=`<div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div><div style="font-size:17px;font-weight:800;">${sym}</div><div style="font-size:11px;color:var(--text2)">${ents.length} تسجيل</div></div>
+        <div style="text-align:left"><div style="font-size:20px;font-weight:900">${last.toFixed(2)} ﷼</div><span class="badge ${up?'bg':'br'}">${up?'▲':'▼'} ${Math.abs(chg).toFixed(2)}%</span></div>
+      </div>
+      <div style="height:100px;margin-bottom:12px"><canvas id="lc-${sym}"></canvas></div>
+      <div class="stat2">
+        <div class="sbox"><div class="slbl">أعلى سعر</div><div class="sval" style="color:var(--green)">${high.toFixed(2)}</div></div>
+        <div class="sbox"><div class="slbl">أدنى سعر</div><div class="sval" style="color:var(--red)">${low.toFixed(2)}</div></div>
+        <div class="sbox"><div class="slbl">RSI</div><div class="sval" style="color:${a.rsi>70?'var(--red)':a.rsi<30?'var(--green)':'var(--text)'}">${a.rsi.toFixed(0)}</div></div>
+        <div class="sbox"><div class="slbl">الجلسات</div><div class="sval">${closes.length}</div></div>
+      </div>
+      <div class="vbox ${vCls}"><div class="vtitle">${sLbl}</div><div class="vtext">${a.reasons.join(' · ')}</div></div>
+    </div>`;
+  });
+  an.innerHTML=html;
+
+  Object.entries(byS).forEach(([sym,ents])=>{
+    const sorted=[...ents].sort((a,b)=>new Date(a.date)-new Date(b.date));
+    const closes=sorted.map(e=>e.price);
+    const labels=sorted.map(e=>e.date.slice(5));
+    const a=analyzeLocal(closes);
+    setTimeout(()=>{
+      const c=document.getElementById('lc-'+sym);
+      if(!c)return;
+      if(LC[sym]) LC[sym].destroy();
+      const col=a?.trend==='up'?'#00dd8a':a?.trend==='down'?'#ff3355':'#4080ff';
+      LC[sym]=new Chart(c,{type:'line',data:{labels,datasets:[{data:closes,borderColor:col,borderWidth:2,pointRadius:3,pointBackgroundColor:col,fill:true,backgroundColor:col+'18',tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y.toFixed(2)} ﷼`}}},scales:{x:{ticks:{color:'#5a7090',font:{size:9},maxTicksLimit:6},grid:{display:false}},y:{ticks:{color:'#5a7090',font:{size:9}},grid:{color:'#182035'}}}}});
+    },80);
+  });
+
+  document.getElementById('logTblWrap').style.display='block';
+  const tC={close:'var(--text)',buy:'var(--green)',sell:'var(--red)'};
+  const tL={close:'إغلاق',buy:'شراء',sell:'بيع'};
+  document.getElementById('logTbody').innerHTML=LE.map(e=>`<tr><td style="color:var(--text2)">${e.date}</td><td><strong>${e.sym}</strong></td><td><strong>${e.price.toFixed(2)}</strong> ﷼</td><td style="color:${tC[e.type]}">${tL[e.type]||e.type}</td><td style="color:var(--text2);font-size:11px;">${e.note||'-'}</td><td><button class="btn btn-red btn-sm" onclick="delLog(${e.id})">×</button></td></tr>`).join('');
+}
+
+// ── PAGE 3 ──
+function setAI(v){document.getElementById('aiIn').value=v;doAI();}
+async function doAI(){
+  const q=document.getElementById('aiIn').value.trim();
+  if(!q){showToast('أدخل رمز أو اسم السهم');return;}
+  const res=document.getElementById('aiResult');
+  res.innerHTML=`<div class="ai-bubble"><div class="ai-head"><span class="ai-icon">🤖</span><span class="ai-title">جارٍ تحليل "${q}"...</span></div><div class="dots"><span>●</span><span>●</span><span>●</span></div></div>`;
+
+  const sys=`أنت محلل مالي خبير في السوق السعودي تداول. ابحث باستخدام web_search عن بيانات السهم الحالية.
+اكتب تحليلاً مبسطاً بالعربية للمستثمر المبتدئ يشمل:
+1. معلومات السهم: الاسم والرمز والسعر والتغيير اليومي
+2. التحليل الفني: الاتجاه والمتوسطات المتحركة وRSI
+3. المؤشرات المالية: P/E والعائد على الأرباح والتوزيعات إن وجدت
+4. الحكم النهائي: شراء أو بيع أو احتفاظ أو انتظار مع الأسباب
+5. أبرز مخاطر الاستثمار في هذا السهم
+
+اكتب بوضوح وبساطة. استخدم الأرقام الفعلية.
+آخر سطر بالضبط: SIGNAL:buy أو SIGNAL:sell أو SIGNAL:hold أو SIGNAL:wait`;
+
+  try{
+    const raw=await claude(sys,`حلل سهم "${q}" في السوق السعودي تحليلاً شاملاً ومبسطاً`);
+    const sm=raw.match(/SIGNAL:(buy|sell|hold|wait)/i);
+    const sig=(sm?.[1]||'wait').toLowerCase();
+    const clean=raw.replace(/SIGNAL:(buy|sell|hold|wait)/gi,'').trim();
+
+    const vCls={buy:'vbuy',sell:'vsell',hold:'vhold',wait:'vwait'}[sig];
+    const vHdr={buy:'🟢 إشارة شراء — يستحق الدراسة',sell:'🔴 إشارة بيع — تجنب الدخول حالياً',hold:'🟡 احتفاظ — راقب ولا تتسرع',wait:'⏳ انتظار — الصورة غير واضحة'}[sig];
+
+    const fmt=clean
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/^(\d+\..+)$/gm,'<div style="padding:5px 0;font-weight:700;color:var(--text);">$1</div>')
+      .replace(/^[-•]\s*(.+)$/gm,'<div style="padding:2px 0 2px 6px;color:var(--text2);">› $1</div>')
+      .replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+
+    res.innerHTML=`
+      <div class="ai-bubble">
+        <div class="ai-head"><span class="ai-icon">🤖</span><span class="ai-title">تحليل "${q}" — ${new Date().toLocaleDateString('ar-SA')}</span></div>
+        <div class="ai-text">${fmt}</div>
+      </div>
+      <div class="vbox ${vCls}">
+        <div class="vtitle">${vHdr}</div>
+        <div class="vtext">هذا الحكم بناءً على بيانات لحظة التحليل. راجع التحليل دورياً مع تغير السوق.</div>
+      </div>
+      <button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="doAI()">🔄 تحديث التحليل</button>`;
+  }catch(e){
+    console.error(e);
+    res.innerHTML=`<div class="ai-bubble" style="border-color:rgba(255,51,85,.3)"><div class="ai-head"><span class="ai-icon">⚠️</span><span class="ai-title" style="color:var(--red)">تعذّر التحليل</span></div><div class="ai-text">تحقق من اتصالك بالإنترنت وحاول مجدداً.</div></div><button class="btn btn-blue btn-full" style="margin-top:10px" onclick="doAI()">إعادة المحاولة</button>`;
+  }
+}
+
+// ── LOCAL ANALYSIS ──
+function analyzeLocal(closes){
+  const c=(closes||[]).filter(v=>!isNaN(v)&&v>0);
+  if(c.length<3)return{signal:'wait',reasons:['بيانات غير كافية'],ma10:0,ma20:0,ma50:0,rsi:50,trend:'neutral'};
+  const ma10=avg(c.slice(-10)),ma20=avg(c.slice(-20)),ma50=avg(c.slice(-Math.min(50,c.length)));
+  const p=c[c.length-1],rsi=calcRSI(c,14);
+  const trend=p>ma50?'up':p>ma20?'neutral':'down';
+  const aM10=p>ma10,aM20=p>ma20,aM50=p>ma50;
+  const rec=c.slice(-5).map((v,i,a)=>i>0?(v-a[i-1])/a[i-1]:0).slice(1);
+  const pos=rec.filter(v=>v>0).length;
+  let sc=0;
+  if(aM10)sc++;if(aM20)sc++;if(aM50)sc++;if(rsi>30&&rsi<70)sc++;if(pos>=3)sc++;
+  let signal,reasons;
+  if(sc>=4&&rsi<65){signal='buy';reasons=[aM50?'السعر فوق MA50 ✓':'السعر تحت MA50 ✗',`RSI = ${rsi.toFixed(0)} مناسب`,`${pos} جلسات إيجابية من آخر 4`,'الزخم صاعد'];}
+  else if(rsi>72||(sc<=1&&p<ma20)){signal='sell';reasons=[rsi>72?`RSI = ${rsi.toFixed(0)} ذروة شراء ⚠️`:`RSI = ${rsi.toFixed(0)}`,!aM20?'السعر تحت MA20 ✗':'السعر فوق MA20 ✓','ضعف في الزخم'];}
+  else if(sc>=3){signal='hold';reasons=['الاتجاه إيجابي عموماً',`RSI = ${rsi.toFixed(0)} طبيعي`,aM50?'فوق MA50 ✓':'قرب MA50'];}
+  else{signal='wait';reasons=['إشارات غير حاسمة',`RSI = ${rsi.toFixed(0)}`,'انتظر تأكيداً أوضح'];}
+  return{signal,reasons,ma10,ma20,ma50,rsi,trend};
+}
+function avg(a){const c=a.filter(v=>!isNaN(v));return c.length?c.reduce((x,y)=>x+y,0)/c.length:0;}
+function calcRSI(c,p=14){
+  if(c.length<p+1)return 50;
+  let g=0,l=0;
+  for(let i=c.length-p;i<c.length;i++){const d=c[i]-c[i-1];d>0?g+=d:l+=Math.abs(d);}
+  if(!l)return 100;
+  return 100-(100/(1+(g/p)/(l/p)));
+}
+
+// ── UTILS ──
+function saveWL(){localStorage.setItem('wl',JSON.stringify(WL.map(s=>({sym:s.sym,name:s.name}))));}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+
+// ── INIT ──
+window.addEventListener('load',()=>{
+  document.getElementById('lDate').value=new Date().toISOString().split('T')[0];
+  if(WL.length){
+    WL.forEach(s=>renderRow(s.sym,s.name,null));
+    setTimeout(()=>WL.forEach(s=>fetchStock(s.sym)),300);
+  }
+});
+</script>
+</body>
+</html>
