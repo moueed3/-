@@ -6,38 +6,38 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="تداول ذكي">
-<meta name="theme-color" content="#060a14">
+<meta name="theme-color" content="#f0f4ff">
 <title>تداول ذكي — أسهم السعودية</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
 :root{
-  --bg:#060a14;--bg2:#0b1020;--bg3:#101828;
-  --card:#0d1522;--card2:#121e30;
-  --border:#182035;--border2:#1e2d45;
-  --gold:#f5c230;--green:#00dd8a;--red:#ff3355;
-  --blue:#4080ff;--purple:#9060ff;
-  --text:#dce4f5;--text2:#5a7090;--text3:#2a3a55;
+  --bg:#f0f4ff;--bg2:#e8eef8;--bg3:#dde5f5;
+  --card:#ffffff;--card2:#f5f8ff;
+  --border:#d0daee;--border2:#b8c8e8;
+  --gold:#c8860a;--green:#0a8a5a;--red:#cc2040;
+  --blue:#1a5fd4;--purple:#6040cc;
+  --text:#0f1e3a;--text2:#4a5a7a;--text3:#8a9ab8;
   --r:14px;--rs:9px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
 body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 10%,rgba(64,128,255,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 80% 80%,rgba(144,96,255,.04) 0%,transparent 60%);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 10%,rgba(26,95,212,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 80% 80%,rgba(96,64,204,.04) 0%,transparent 60%);}
 .app{display:flex;flex-direction:column;height:100%;position:relative;z-index:1;}
 .pages{flex:1;overflow:hidden;position:relative;}
 .page{position:absolute;inset:0;overflow-y:auto;display:none;padding-bottom:80px;}
 .page.active{display:block;animation:fadeUp .25s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-nav{display:flex;background:rgba(6,10,20,.97);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom,0px);flex-shrink:0;position:relative;z-index:10;}
+nav{display:flex;background:rgba(240,244,255,.97);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom,0px);flex-shrink:0;position:relative;z-index:10;box-shadow:0 -2px 16px rgba(26,95,212,.08);}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px 8px;gap:3px;border:none;background:transparent;color:var(--text2);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:10px;font-weight:600;transition:color .2s;}
 .nb .ni{font-size:22px;line-height:1;transition:transform .2s;}
 .nb.on{color:var(--gold);}
 .nb.on .ni{transform:scale(1.1);}
-.tb{padding:18px 18px 14px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(6,10,20,.95);backdrop-filter:blur(16px);z-index:5;}
+.tb{padding:18px 18px 14px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(240,244,255,.95);backdrop-filter:blur(16px);z-index:5;}
 .tb-t{font-size:19px;font-weight:900;letter-spacing:-.3px;}
 .tb-s{font-size:11px;color:var(--text2);margin-top:2px;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:0 2px 12px rgba(26,95,212,.06);}
 input,select{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:var(--rs);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s;width:100%;}
 input:focus,select:focus{border-color:var(--blue);}
 input::placeholder{color:var(--text3);}
@@ -63,9 +63,9 @@ input::placeholder{color:var(--text3);}
 .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
 .pre{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:6px 13px;border-radius:20px;font-family:'Tajawal',sans-serif;font-size:11px;cursor:pointer;transition:all .2s;white-space:nowrap;}
 .pre:active{border-color:var(--gold);color:var(--gold);}
-.srow{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden;animation:fadeUp .25s ease;}
+.srow{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden;animation:fadeUp .25s ease;box-shadow:0 2px 10px rgba(26,95,212,.05);}
 .srow-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}
-.srow-head:active{background:var(--card2);}
+.srow-head:active{background:var(--bg2);}
 .sinfo{display:flex;flex-direction:column;gap:3px;}
 .ssym{font-size:17px;font-weight:800;}
 .sname{font-size:11px;color:var(--text2);}
@@ -76,17 +76,17 @@ input::placeholder{color:var(--text3);}
 .sp-sell{background:rgba(255,51,85,.15);color:var(--red);}
 .sp-hold{background:rgba(245,194,48,.15);color:var(--gold);}
 .sp-wait{background:rgba(64,128,255,.15);color:var(--blue);}
-.sdet{display:none;padding:14px 16px;border-top:1px solid var(--border);background:var(--bg3);}
+.sdet{display:none;padding:14px 16px;border-top:1px solid var(--border);background:var(--bg2);}
 .sdet.open{display:block;animation:fadeUp .2s ease;}
 .det-chart{height:100px;margin-bottom:12px;}
 .irow{display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap;}
-.ibox{flex:1;min-width:55px;background:var(--card);border-radius:var(--rs);padding:8px 10px;text-align:center;}
+.ibox{flex:1;min-width:55px;background:var(--card);border-radius:var(--rs);padding:8px 10px;text-align:center;border:1px solid var(--border);}
 .ilbl{font-size:9px;color:var(--text2);margin-bottom:3px;}
 .ival{font-size:13px;font-weight:800;}
 .rlist{list-style:none;}
 .rlist li{font-size:12px;color:var(--text2);padding:3px 0;display:flex;align-items:center;gap:6px;}
 .rlist li::before{content:'›';color:var(--text3);}
-.ai-bubble{background:linear-gradient(135deg,rgba(64,128,255,.08),rgba(144,96,255,.08));border:1px solid rgba(64,128,255,.2);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;}
+.ai-bubble{background:linear-gradient(135deg,rgba(26,95,212,.06),rgba(96,64,204,.06));border:1px solid rgba(26,95,212,.2);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;}
 .ai-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
 .ai-icon{font-size:18px;}
 .ai-title{font-size:13px;font-weight:700;color:var(--blue);}
@@ -94,7 +94,7 @@ input::placeholder{color:var(--text3);}
 .ai-text strong{color:var(--text);font-weight:700;}
 .tbl-wrap{overflow-x:auto;border-radius:var(--rs);border:1px solid var(--border);}
 table{width:100%;border-collapse:collapse;font-size:12px;}
-th{background:var(--bg3);color:var(--text2);font-size:10px;font-weight:700;letter-spacing:.4px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--border);}
+th{background:var(--bg2);color:var(--text2);font-size:10px;font-weight:700;letter-spacing:.4px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--border);}
 td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:var(--bg3);}
@@ -117,13 +117,13 @@ tr:hover td{background:var(--bg3);}
 .empty{text-align:center;padding:36px 20px;color:var(--text2);}
 .empty .ei{font-size:36px;margin-bottom:10px;}
 .empty p{font-size:13px;}
-.disc{background:rgba(245,194,48,.05);border:1px solid rgba(245,194,48,.15);border-radius:var(--rs);padding:10px 14px;font-size:11px;color:var(--text2);line-height:1.7;margin:0 18px 14px;}
+.disc{background:rgba(200,134,10,.07);border:1px solid rgba(200,134,10,.2);border-radius:var(--rs);padding:10px 14px;font-size:11px;color:var(--text2);line-height:1.7;margin:0 18px 14px;}
 .disc strong{color:var(--gold);}
 .stat2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
 .sbox{background:var(--bg3);border-radius:var(--rs);padding:10px;text-align:center;}
 .slbl{font-size:10px;color:var(--text2);margin-bottom:3px;}
 .sval{font-size:15px;font-weight:800;}
-.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--card2);border:1px solid var(--border2);color:var(--text);padding:9px 20px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:all .25s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--text);border:1px solid var(--border2);color:#fff;padding:9px 20px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:all .25s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.2);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .sbar{display:flex;gap:8px;margin-bottom:14px;}
 .sbar input{flex:1;}
@@ -131,9 +131,73 @@ tr:hover td{background:var(--bg3);}
 .dots span{animation:blink 1.4s infinite;font-size:20px;}
 .dots span:nth-child(2){animation-delay:.2s;}
 .dots span:nth-child(3){animation-delay:.4s;}
+
+/* ── LOCK SCREEN ── */
+.lock{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(145deg,#1a3a6e 0%,#0f2050 40%,#1a1060 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;
+}
+.lock-logo{font-size:52px;margin-bottom:8px;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+.lock-title{font-size:24px;font-weight:900;color:#fff;margin-bottom:4px;letter-spacing:-.5px;}
+.lock-sub{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:36px;}
+.lock-dots{display:flex;gap:14px;margin-bottom:32px;}
+.lock-dot{
+  width:16px;height:16px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.4);
+  background:transparent;transition:all .2s;
+}
+.lock-dot.filled{background:#fff;border-color:#fff;transform:scale(1.1);}
+.lock-dot.error{background:#ff4466;border-color:#ff4466;animation:shake .4s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.lock-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:260px;}
+.lock-key{
+  height:64px;border-radius:16px;border:none;
+  background:rgba(255,255,255,.1);color:#fff;
+  font-family:'Tajawal',sans-serif;font-size:22px;font-weight:700;
+  cursor:pointer;transition:all .15s;backdrop-filter:blur(10px);
+}
+.lock-key:active{background:rgba(255,255,255,.25);transform:scale(.94);}
+.lock-key.del{font-size:18px;background:rgba(255,100,100,.15);}
+.lock-key.empty{background:transparent;pointer-events:none;}
+.lock-error{font-size:13px;color:#ff8899;height:18px;margin-bottom:8px;text-align:center;}
+.lock-hint{font-size:11px;color:rgba(255,255,255,.3);margin-top:20px;}
 </style>
 </head>
 <body>
+
+<!-- ══ LOCK SCREEN ══ -->
+<div class="lock" id="lockScreen">
+  <div class="lock-logo">📈</div>
+  <div class="lock-title">تداول ذكي</div>
+  <div class="lock-sub">محلل الأسهم السعودية</div>
+  <div class="lock-dots" id="lockDots">
+    <div class="lock-dot" id="d0"></div>
+    <div class="lock-dot" id="d1"></div>
+    <div class="lock-dot" id="d2"></div>
+    <div class="lock-dot" id="d3"></div>
+    <div class="lock-dot" id="d4"></div>
+    <div class="lock-dot" id="d5"></div>
+  </div>
+  <div class="lock-error" id="lockError"></div>
+  <div class="lock-pad">
+    <button class="lock-key" onclick="pinPress('1')">1</button>
+    <button class="lock-key" onclick="pinPress('2')">2</button>
+    <button class="lock-key" onclick="pinPress('3')">3</button>
+    <button class="lock-key" onclick="pinPress('4')">4</button>
+    <button class="lock-key" onclick="pinPress('5')">5</button>
+    <button class="lock-key" onclick="pinPress('6')">6</button>
+    <button class="lock-key" onclick="pinPress('7')">7</button>
+    <button class="lock-key" onclick="pinPress('8')">8</button>
+    <button class="lock-key" onclick="pinPress('9')">9</button>
+    <button class="lock-key empty"></button>
+    <button class="lock-key" onclick="pinPress('0')">0</button>
+    <button class="lock-key del" onclick="pinDel()">⌫</button>
+  </div>
+  <div class="lock-hint">أدخل الرقم السري للدخول</div>
+</div>
 <div class="app">
 <div class="pages">
 
@@ -234,6 +298,61 @@ tr:hover td{background:var(--bg3);}
 <div class="toast" id="toast"></div>
 
 <script>
+// ── PIN LOCK ──
+const _k = ['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'].map(s=>s).join('');
+const PIN = btoa('050046');
+let pinInput = '';
+
+function pinPress(n){
+  if(pinInput.length>=6) return;
+  pinInput += n;
+  updateDots();
+  if(pinInput.length===6){
+    setTimeout(()=>{
+      if(btoa(pinInput)===PIN){
+        document.getElementById('lockScreen').style.animation='fadeOut .4s ease forwards';
+        setTimeout(()=>{
+          document.getElementById('lockScreen').style.display='none';
+          sessionStorage.setItem('unlocked','1');
+        },380);
+      } else {
+        document.querySelectorAll('.lock-dot').forEach(d=>d.classList.add('error'));
+        document.getElementById('lockError').textContent='رقم سري خاطئ، حاول مجدداً';
+        setTimeout(()=>{
+          pinInput='';
+          updateDots();
+          document.querySelectorAll('.lock-dot').forEach(d=>{d.classList.remove('error');d.classList.remove('filled');});
+          document.getElementById('lockError').textContent='';
+        },800);
+      }
+    },120);
+  }
+}
+
+function pinDel(){
+  if(!pinInput.length) return;
+  pinInput = pinInput.slice(0,-1);
+  updateDots();
+}
+
+function updateDots(){
+  for(let i=0;i<6;i++){
+    document.getElementById('d'+i).classList.toggle('filled', i<pinInput.length);
+  }
+}
+
+// check session
+window.addEventListener('load',()=>{
+  if(sessionStorage.getItem('unlocked')==='1'){
+    document.getElementById('lockScreen').style.display='none';
+  }
+});
+
+// add fadeOut keyframe
+const st=document.createElement('style');
+st.textContent='@keyframes fadeOut{to{opacity:0;transform:scale(1.04);}}';
+document.head.appendChild(st);
+
 // ── STATE ──
 let WL  = JSON.parse(localStorage.getItem('wl')||'[]');
 let LE  = JSON.parse(localStorage.getItem('le')||'[]');
@@ -253,7 +372,12 @@ function go(p){
 async function claude(system, user){
   const r = await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
-    headers:{'Content-Type':'application/json'},
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key':_k,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
     body:JSON.stringify({
       model:'claude-sonnet-4-20250514',
       max_tokens:1000,
